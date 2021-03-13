@@ -1,10 +1,5 @@
-var stdin = process.stdin;
-
-// without this, we would only get streams once enter is pressed
-stdin.setRawMode( true );
-
 import DrawShipContext, {DrawMerchantShipStrategy, DrawPirateShipStrategy} from "./src/gameplay/playerActions/drawCardStrategy"
-import Table from "./src/gameplay/table/index"
+import Table from "./gameplay/table/index"
 
 console.log("Loot game is running")
 
