@@ -1,14 +1,19 @@
 import { DefaultDeckBuilder } from "./builder";
 import Game from "./main";
 import webServer, { io } from "./network/socket";
-import CardMerchantShip from '../src/prototype/CardMechantShip'
+import { CardMerchantShip, CardPirateShip } from './prototype'
 
-const game = new Game(new DefaultDeckBuilder());
 
 const merchantShipPrototype = new CardMerchantShip()
+const pirateShipPrototype = new CardPirateShip()
+
+const deckBuilder = new DefaultDeckBuilder()
+deckBuilder.setMerchantShipPrototype(merchantShipPrototype)
+deckBuilder.setPirateShipPrototype(pirateShipPrototype)
+
+const game = new Game(deckBuilder);
 
 let merchantShips = []
-
 
 const players = []
 
@@ -51,6 +56,8 @@ io.on("connection", (socket) => {
     console.log("Player: " + socketID + " built deck: ");
     game.deck.listCards();
     io.emit("deck-built", {owner: socketID, deck: game.deck});
+    console.log("Total of players: ", players.length)
+    console.log("Players connected: ", players)
   });
 
   socket.on("build-merchant-ship", ({socketID, coins}) => {
@@ -58,12 +65,16 @@ io.on("connection", (socket) => {
     console.log("Player: " + socketID + " built merchant ship: ");
     console.log("MerchantShips: ", merchantShips)
     io.emit("merchant-ship-built", {owner: socketID, cards: merchantShips});
+    console.log("Total of players: ", players.length)
+    console.log("Players connected: ", players)
   });
 
   socket.on("clear-merchant-ships", (socketID) => {
     clearMerchantShips()
     console.log("Player: " + socketID + " cleared merchant ships!!!");
     io.emit("merchant-ships-cleared", {owner: socketID, cards: merchantShips});
+    console.log("Total of players: ", players.length)
+    console.log("Players connected: ", players)
 
   })
 

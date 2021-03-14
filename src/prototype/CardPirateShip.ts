@@ -1,12 +1,11 @@
-import { CardInterface, CardType } from "src/model";
 import CardPrototype from "./CardPrototype";
 
-export default class CardMerchantShip extends CardPrototype {
+export default class CardPirateShip extends CardPrototype {
 
 
     constructor() {
         super()
-        this.type = "trade-ship"
+        this.type = "pirate-ship"
     }
 
     clone() {

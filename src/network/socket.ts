@@ -21,14 +21,8 @@ const io = require("socket.io")(webServer, {
       origin: "*",
       methods: ["GET", "POST"]
     },
-    connectTimeout: 900000,
-    pingTimeout: 900000,
-    pingInterval: 900000,
-    upgradeTimeout: 9000000,
-    timeout: 9000000,
 });
 
-io.heartbeatTimeout = 900000;
 io.use(middleware);
 
 export { io, webApp }
