@@ -1,41 +1,49 @@
-console.log('> Script started')
-const express = require('express')
-const cors = require('cors')
-const webApp = express()
-const webServer = require('http').createServer(webApp)
-// webServer.use(cors)
-const io = require("socket.io")(webServer, {
-    cors: {
-      origin: "http://localhost:3001",
-      methods: ["GET", "POST"]
-    }
+import { DefaultDeckBuilder } from "./builder";
+import Game from "./main";
+import webServer, { io, webApp } from "./network/socket";
+
+const game = new Game(new DefaultDeckBuilder());
+
+let playerID = 0
+
+const generatePlayerID = () => {
+  return playerID += 1
+}
+
+const players = []
+
+const addPlayer = (player) => {
+  players.push(player)
+  console.log("Total of players: ", players.length)
+  console.log("Players connected: ", players)
+}
+
+const removePlayer = (player) => {
+  players.splice(players.indexOf(player), 1)
+}
+
+io.on("connection", (socket) => {
+
+  // io.emit("newID", generatePlayerID())
+
+  const playerId = socket.id
+  console.log(`> Player connected: ${playerId}`)
+
+  addPlayer({ playerId: playerId })
+
+  socket.on('disconnect', () => {
+      removePlayer({ playerId: playerId })
+      console.log(`> Player disconnected: ${playerId}`)
+  })
+
+  socket.on("build-deck", (socketID) => {
+    game.deckDirector.buildDeck();
+    console.log("Player: " + socketID + " built deck: ");
+    game.deck.listCards();
+    io.emit("deck-built", {owner: socketID, deck: game.deck});
   });
-
-var middleware = require('socketio-wildcard')();
-
-io.use(middleware);
-
-// setInterval(() => {
-//   io.emit('concurrent-connections', io.engine.clientsCount)
-//   console.log("emitting socket")
-// }, 5000)
-
-io.on('connection', function(socket){
-  
-    console.log("Client "+socket.id+" connected")
-    
-    socket.on('disconnect', () => {
-        console.log("disconnect")
-    })
-    
-    socket.on("*", (event) => {
-        console.log(`got ${event}`);
-    });
-    socket.on("message", () => console.log("message received"))
-    socket.on("message", (data) => console.log(data))
-
 });
 
-webServer.listen(3000, function(){
-  console.log('> Server listening on port:',3000)
+webServer.listen(3000, function () {
+  console.log("> Server listening on port:", 3000);
 });
