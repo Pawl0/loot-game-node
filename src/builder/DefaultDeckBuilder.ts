@@ -21,6 +21,7 @@ class DefaultDeckBuilder implements DeckBuilder {
     }
 
     setMerchantShipPrototype(merchantShipPrototype: CardMerchantShip) {
+        console.log("merchantShipPrototype set: ", merchantShipPrototype)
         this.merchantShipPrototype = merchantShipPrototype
     }
 
@@ -32,10 +33,11 @@ class DefaultDeckBuilder implements DeckBuilder {
         this.merchantShips = merchantShips
     }
 
-    buildMerchantShipsWithGold(quantity: number, coins: number) {
+    buildMerchantShipsWithGold(quantity: number, coins: number, merchantShipPrototype: CardMerchantShip) {
         const merchantShips = []
+        console.log("merchantShipPrototype: ", merchantShipPrototype)
         for (let i = 0; i < quantity; i++) {
-            const merchantShip:CardMerchantShip = this.merchantShipPrototype.clone()
+            const merchantShip:CardMerchantShip = merchantShipPrototype?.clone()
             merchantShip.setAttributes({coins})
             merchantShips.push(merchantShip.getCard())
         }
@@ -44,7 +46,7 @@ class DefaultDeckBuilder implements DeckBuilder {
     }
 
     buildMerchantShips() {
-        const merchantShips = buildAllMerchantShips(this.buildMerchantShipsWithGold);
+        const merchantShips = buildAllMerchantShips(this.buildMerchantShipsWithGold, this.merchantShipPrototype);
         this.setMerchantShips(merchantShips)
     }
 
@@ -52,10 +54,10 @@ class DefaultDeckBuilder implements DeckBuilder {
         this.pirateShips = pirateShips
     }
 
-    buildPirateShipsWithSkulls(quantity: number, skulls: number) {
+    buildPirateShipsWithSkulls(quantity: number, skulls: number, pirateShipPrototype: CardPirateShip) {
         const pirateShipsWithSkulls = []
         for (let i = 0; i < quantity; i++) {
-            const pirateShip:CardPirateShip = this.pirateShipPrototype.clone()
+            const pirateShip:CardPirateShip = pirateShipPrototype.clone()
             pirateShip.setAttributes({skulls})
             pirateShipsWithSkulls.push(pirateShip)
         }
@@ -79,7 +81,7 @@ class DefaultDeckBuilder implements DeckBuilder {
 
     buildPirateShips() {
 
-        const pirateShipsWithSkulls = buildAllPirateShipsWithSkulls(this.buildPirateShipsWithSkulls);
+        const pirateShipsWithSkulls = buildAllPirateShipsWithSkulls(this.buildPirateShipsWithSkulls, this.pirateShipPrototype);
 
         this.buildPirateShipsWithColors(pirateShipsWithSkulls)
     }

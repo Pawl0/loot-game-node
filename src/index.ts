@@ -1,8 +1,9 @@
 import { DefaultDeckBuilder } from "./builder";
 import Game from "./main";
-import webServer, { io } from "./network/socket";
+import SocketSingleton from "./network/socket";
 import { CardMerchantShip, CardPirateShip } from './prototype'
 
+const socketInstance = SocketSingleton.getInstance()
 
 const merchantShipPrototype = new CardMerchantShip()
 const pirateShipPrototype = new CardPirateShip()
@@ -36,6 +37,8 @@ const addMerchantShip = (coins: number) => {
 const clearMerchantShips = () => {
   merchantShips = []
 }
+
+const io = socketInstance.getSocket()
 
 io.on("connection", (socket) => {
 
@@ -79,6 +82,8 @@ io.on("connection", (socket) => {
   })
 
 });
+
+const webServer = socketInstance.getWebServer()
 
 webServer.listen(3000, function () {
   console.log("> Server listening on port:", 3000);

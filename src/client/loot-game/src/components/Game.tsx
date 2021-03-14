@@ -74,7 +74,7 @@ const Game: React.FC<{ setPlayerID: Function }> = ({ setPlayerID }) => {
       <input placeholder="amount of coins" value={coins} onChange={setAmountOfCoins} type="number" />
       <button onClick={buildMerchantShip}>Build Merchant Ship</button> 
       <button onClick={clearMerchantShips}>Clear Merchant Ships</button>
-      <h1>Owner ID: {deck.owner}</h1>
+      <h1>Owner ID: {merchantShips.owner}</h1>
       <ul>
         {merchantShips.cards &&
           merchantShips.cards.map((card, index) => (

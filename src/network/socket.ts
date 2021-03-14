@@ -4,27 +4,47 @@ import socketioWildcard from "socketio-wildcard"
 import path from "path"
 import cors from "cors"
 
-const webApp = express()
+export default class SocketSingleton {
 
-const clientPath = path.join(__dirname, "../client/loot-game/build/")
-webApp.use(express.static(clientPath))
-webApp.use(cors)
+  private webServer
+  private static instance: SocketSingleton
+  private io
 
-const middleware = socketioWildcard();
+  constructor() {
+    const clientPath = path.join(__dirname, "../client/loot-game/build/")
+    const webApp = express()
+    webApp.use(express.static(clientPath))
+    webApp.use(cors)
 
-console.log('> Socket started')
+    const middleware = socketioWildcard();
 
-const webServer = http.createServer(webApp)
+    this.webServer = http.createServer(webApp)
 
-const io = require("socket.io")(webServer, {
-    cors: {
-      origin: "*",
-      methods: ["GET", "POST"]
-    },
-});
+    this.io = require("socket.io")(this.webServer, {
+        cors: {
+          origin: "*",
+          methods: ["GET", "POST"]
+        },
+    });
 
-io.use(middleware);
+    this.io.use(middleware);
+    console.log('> Socket started')
+  }
 
-export { io, webApp }
+  getSocket() {
+    return this.io
+  }
 
-export default webServer
+  getWebServer() {
+    return this.webServer
+  }
+
+  public static getInstance(): SocketSingleton {
+    if (!SocketSingleton.instance) {
+            SocketSingleton.instance = new SocketSingleton();
+        }
+
+        return SocketSingleton.instance;
+  }
+
+}

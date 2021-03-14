@@ -1,8 +1,8 @@
-const buildAllPirateShipsWithSkulls = (buildPirateShipsWithSkulls) => {
-    const pirateShips1 = buildPirateShipsWithSkulls(2, 1);
-    const pirateShips2 = buildPirateShipsWithSkulls(4, 2);
-    const pirateShips3 = buildPirateShipsWithSkulls(4, 3);
-    const pirateShips4 = buildPirateShipsWithSkulls(2, 4);
+const buildAllPirateShipsWithSkulls = (buildPirateShipsWithSkulls, pirateShipPrototype) => {
+    const pirateShips1 = buildPirateShipsWithSkulls(2, 1, pirateShipPrototype);
+    const pirateShips2 = buildPirateShipsWithSkulls(4, 2, pirateShipPrototype);
+    const pirateShips3 = buildPirateShipsWithSkulls(4, 3, pirateShipPrototype);
+    const pirateShips4 = buildPirateShipsWithSkulls(2, 4, pirateShipPrototype);
 
     const pirateShipsWithSkulls = [
         ...pirateShips1,

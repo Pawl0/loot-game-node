@@ -1,5 +1,5 @@
 import { Deck } from 'src/model';
-import { DeckDirector, DefaultDeckBuilder } from './builder'
+import { DeckDirector } from './builder'
 import DeckBuilder from './builder/DeckBuilder'
 
 class Game {
