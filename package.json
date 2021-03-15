@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node ./src/index.ts",
-    "start": "cd ./src/client/loot-game/ && npm run build && cd ../../ && npm run dev",
+    "start": "cd ./src/client/loot-game/ && npm i && npm run build && cd ../../ && npm run dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Paulo Henrique Oliveira dos Santos",
