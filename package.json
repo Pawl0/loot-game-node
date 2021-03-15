@@ -9,7 +9,6 @@
   },
   "author": "Paulo Henrique Oliveira dos Santos",
   "license": "ISC",
-  "type": "module",
   "dependencies": {
     "@types/socket.io": "^2.1.13",
     "express": "^4.17.1",
