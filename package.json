@@ -4,7 +4,8 @@
   "description": "A NodeJS version of the Loot cardgame",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node ./src/index.ts",
+    "dev": "ts-node ./src/index.ts",
+    "start": "cd ./src/client/loot-game/ && npm run build && cd ../../ && npm run dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Paulo Henrique Oliveira dos Santos",
