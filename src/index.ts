@@ -125,9 +125,12 @@ io.on("connection", (socket) => {
   );
 });
 
-webServer.listen(3000, function () {
-  console.log(
-    "> Server listening on port:",
-    3000
-  );
-});
+webServer.listen(
+  process.env.PORT || 3000,
+  function () {
+    console.log(
+      "> Server listening on port:",
+      process.env.PORT || 3000
+    );
+  }
+);
