@@ -1,4 +1,7 @@
-import {CardMerchantShip, CardPirateShip} from "../prototype";
+import {
+  CardMerchantShip,
+  CardPirateShip,
+} from "../prototype";
 import { CardInterface, Deck } from "../model";
 import DeckBuilder from "./DeckBuilder";
 import { COLORS, NUM_COLORS} from '../utils/constants'
@@ -63,20 +66,25 @@ class DefaultDeckBuilder implements DeckBuilder {
         this.setMerchantShips(merchantShips)
     }
 
-    private setPirateShips(pirateShips: Array<CardPirateShip>) {
-        this.pirateShips = pirateShips
+  private setPirateShips(
+    pirateShips: Array<CardPirateShip>
+  ) {
+    this.pirateShips = pirateShips;
+  }
+
+  buildPirateShipsWithSkulls(
+    quantity: number,
+    skulls: number
+  ) {
+    const pirateShipsWithSkulls = [];
+    for (let i = 0; i < quantity; i++) {
+      const pirateShip: CardPirateShip = this.pirateShipPrototype.clone();
+      pirateShip.setAttributes({ skulls });
+      pirateShipsWithSkulls.push(pirateShip);
     }
 
-    buildPirateShipsWithSkulls(quantity: number, skulls: number) {
-        const pirateShipsWithSkulls = []
-        for (let i = 0; i < quantity; i++) {
-            const pirateShip:CardPirateShip = this.pirateShipPrototype.clone()
-            pirateShip.setAttributes({skulls})
-            pirateShipsWithSkulls.push(pirateShip)
-        }
-
-        return pirateShipsWithSkulls;
-    }
+    return pirateShipsWithSkulls;
+  }
 
     buildPirateShipsWithColors(pirateShipsWithSkulls: Array<CardPirateShip>) {
         let pirateShipsWithColors = []
@@ -109,31 +117,29 @@ class DefaultDeckBuilder implements DeckBuilder {
         this.buildPirateShipsWithColors(pirateShipsWithSkulls)
     }
 
-    createDeck() {
-        
-        this.buildMerchantShips()
-        this.buildPirateShips()
-        const cards = [
-            ...this.merchantShips,
-            ...this.pirateShips,
-        ]
+  createDeck() {
+    this.buildMerchantShips();
+    this.buildPirateShips();
+    const cards = [
+      ...this.merchantShips,
+      ...this.pirateShips,
+    ];
 
-        this.setDeck(cards)
-    }
+    this.setDeck(cards);
+  }
 
-    setDeck(cards: Array<CardInterface>) {
-        this.deck.setCards(cards)
-    }
+  setDeck(cards: Array<CardInterface>) {
+    this.deck.setCards(cards);
+  }
 
-    getDeck(): Deck {
-        if (this.deck.cards.length === 0) {
-            this.createDeck()
-        }
-        const deck = this.deck
-        this.reset()
-        return deck
+  getDeck(): Deck {
+    if (this.deck.cards.length === 0) {
+      this.createDeck();
     }
-    
+    const deck = this.deck;
+    this.reset();
+    return deck;
+  }
 }
 
-export default DefaultDeckBuilder
+export default DefaultDeckBuilder;
