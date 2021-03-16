@@ -1,16 +1,18 @@
 import { DefaultDeckBuilder } from "./builder";
 import Game from "./main";
 import SocketSingleton from "./network/socket";
-import { CardMerchantShip, CardPirateShip } from './prototype'
+import { CardMerchantShip, CardPirateShip, CardPirateCaptain } from './prototype'
 
 const socketInstance = SocketSingleton.getInstance()
 
 const merchantShipPrototype = new CardMerchantShip()
 const pirateShipPrototype = new CardPirateShip()
+const pirateCaptainPrototype = new CardPirateCaptain()
 
 const deckBuilder = new DefaultDeckBuilder()
 deckBuilder.setMerchantShipPrototype(merchantShipPrototype)
 deckBuilder.setPirateShipPrototype(pirateShipPrototype)
+deckBuilder.setPirateCaptainPrototype(pirateCaptainPrototype)
 
 const game = new Game(deckBuilder);
 

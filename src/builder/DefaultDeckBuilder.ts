@@ -1,6 +1,8 @@
 import {
   CardMerchantShip,
   CardPirateShip,
+  CardPirateCaptain,
+  CardAdmiral,
 } from "../prototype";
 import { CardInterface, Deck } from "../model";
 import DeckBuilder from "./DeckBuilder";
@@ -11,8 +13,11 @@ class DefaultDeckBuilder implements DeckBuilder {
     private deck: Deck
     private merchantShips: Array<CardMerchantShip>
     private pirateShips: Array<CardPirateShip>
+    private pirateCaptains: Array<CardPirateCaptain>
     private pirateShipPrototype: CardPirateShip
     private merchantShipPrototype: CardMerchantShip
+    private pirateCaptainPrototype: CardPirateCaptain
+    private admiral: CardAdmiral
 
     constructor() {
         this.reset()
@@ -29,9 +34,27 @@ class DefaultDeckBuilder implements DeckBuilder {
     setPirateShipPrototype(pirateShipPrototype: CardPirateShip) {
         this.pirateShipPrototype = pirateShipPrototype
     }
+    
+    setPirateCaptainPrototype(pirateCaptainPrototype: CardPirateCaptain) {
+        this.pirateCaptainPrototype = pirateCaptainPrototype
+    }
 
     private setMerchantShips(merchantShips: Array<CardMerchantShip>) {
         this.merchantShips = merchantShips
+    }
+
+    private setPirateShips(
+      pirateShips: Array<CardPirateShip>
+    ) {
+      this.pirateShips = pirateShips;
+    }
+
+    private setPirateCaptains(pirateCaptains: Array<CardPirateCaptain>) {
+      this.pirateCaptains = pirateCaptains;
+    }
+
+    private setAdmiral(admiral: CardAdmiral) {
+      this.admiral = admiral
     }
 
     buildMerchantShipsWithGold(quantity: number, coins: number) {
@@ -64,13 +87,8 @@ class DefaultDeckBuilder implements DeckBuilder {
             ...merchantShips8,
         ];
         this.setMerchantShips(merchantShips)
+        this.deck.cards.push(...this.merchantShips,)
     }
-
-  private setPirateShips(
-    pirateShips: Array<CardPirateShip>
-  ) {
-    this.pirateShips = pirateShips;
-  }
 
   buildPirateShipsWithSkulls(
     quantity: number,
@@ -98,6 +116,7 @@ class DefaultDeckBuilder implements DeckBuilder {
         }
 
         this.setPirateShips(pirateShipsWithColors)
+        this.deck.cards.push(...this.pirateShips)
     }
 
     buildPirateShips() {
@@ -117,15 +136,30 @@ class DefaultDeckBuilder implements DeckBuilder {
         this.buildPirateShipsWithColors(pirateShipsWithSkulls)
     }
 
+    buildPirateCaptains() {
+      const pirateCaptains = []
+      for (let i = 0; i < NUM_COLORS; i++) {
+        const pirateCaptain: CardPirateCaptain= this.pirateCaptainPrototype.clone();
+        pirateCaptain.setAttributes({ color: COLORS[i] });
+        pirateCaptains.push(pirateCaptain.getCard())
+      }
+
+      this.setPirateCaptains(pirateCaptains)
+      this.deck.cards.push(...this.pirateCaptains)
+    }
+
+    buildAdmiral() {
+      const admiral = new CardAdmiral()
+
+      this.setAdmiral(admiral)
+      this.deck.cards.push(this.admiral.getCard())
+    }
+
   createDeck() {
     this.buildMerchantShips();
     this.buildPirateShips();
-    const cards = [
-      ...this.merchantShips,
-      ...this.pirateShips,
-    ];
-
-    this.setDeck(cards);
+    this.buildPirateCaptains();
+    this.buildAdmiral();
   }
 
   setDeck(cards: Array<CardInterface>) {

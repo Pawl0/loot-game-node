@@ -21,20 +21,15 @@ const StyledCard = styled.div`
 export const Card: React.FC<{
   type: string;
   attributes: any;
-}> = ({ type, attributes, position }) => {
-  const onAnimationEnd = () => {
-    console.log("Animation End Card type: ", type);
-    console.log("Animation End Card attributes: ", attributes);
-  };
+}> = ({ type, attributes }) => {
 
   return (
         <StyledCard
-            color={attributes.color}
-            onAnimationEnd={onAnimationEnd}
+            color={attributes?.color || null}
         >
             <h1>{type}</h1>
             <hr style={{ width: "70%" }} />
-            <h2>{attributes.coins || attributes.skulls}</h2>
+            <h2>{attributes?.coins || attributes?.skulls || "*"}</h2>
         </StyledCard>
   );
 };

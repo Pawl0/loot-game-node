@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node ./src/index.ts",
-    "postinstall": "cd ./src/client/loot-game/ && npm i && npm run build && cd ../../",
+    "build:frontend": "cd ./src/client/loot-game/ && npm run build && cd ../../",
+    "postinstall": "cd ./src/client/loot-game/ && npm i && cd ../../ && npm run build:frontend",
     "start": "npm run dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
