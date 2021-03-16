@@ -1,7 +1,6 @@
 import {CardMerchantShip, CardPirateShip} from "../prototype";
 import { CardInterface, Deck } from "../model";
 import DeckBuilder from "./DeckBuilder";
-import { buildAllMerchantShips, buildAllPirateShipsWithSkulls } from "./functions";
 import { COLORS, NUM_COLORS} from '../utils/constants'
 
 class DefaultDeckBuilder implements DeckBuilder {
@@ -21,7 +20,6 @@ class DefaultDeckBuilder implements DeckBuilder {
     }
 
     setMerchantShipPrototype(merchantShipPrototype: CardMerchantShip) {
-        console.log("merchantShipPrototype set: ", merchantShipPrototype)
         this.merchantShipPrototype = merchantShipPrototype
     }
 
@@ -33,11 +31,10 @@ class DefaultDeckBuilder implements DeckBuilder {
         this.merchantShips = merchantShips
     }
 
-    buildMerchantShipsWithGold(quantity: number, coins: number, merchantShipPrototype: CardMerchantShip) {
+    buildMerchantShipsWithGold(quantity: number, coins: number) {
         const merchantShips = []
-        console.log("merchantShipPrototype: ", merchantShipPrototype)
         for (let i = 0; i < quantity; i++) {
-            const merchantShip:CardMerchantShip = merchantShipPrototype?.clone()
+            const merchantShip:CardMerchantShip = this.merchantShipPrototype.clone()
             merchantShip.setAttributes({coins})
             merchantShips.push(merchantShip.getCard())
         }
@@ -45,8 +42,24 @@ class DefaultDeckBuilder implements DeckBuilder {
         return merchantShips;
     }
 
-    buildMerchantShips() {
-        const merchantShips = buildAllMerchantShips(this.buildMerchantShipsWithGold, this.merchantShipPrototype);
+        buildMerchantShips() {
+        const merchantShips2 = this.buildMerchantShipsWithGold(5, 2);
+        const merchantShips3 = this.buildMerchantShipsWithGold(6, 3);
+        const merchantShips4 = this.buildMerchantShipsWithGold(5, 4);
+        const merchantShips5 = this.buildMerchantShipsWithGold(5, 5);
+        const merchantShips6 = this.buildMerchantShipsWithGold(2, 6);
+        const merchantShips7 = this.buildMerchantShipsWithGold(1, 7);
+        const merchantShips8 = this.buildMerchantShipsWithGold(1, 8);
+
+        const merchantShips = [
+            ...merchantShips2,
+            ...merchantShips3,
+            ...merchantShips4,
+            ...merchantShips5,
+            ...merchantShips6,
+            ...merchantShips7,
+            ...merchantShips8,
+        ];
         this.setMerchantShips(merchantShips)
     }
 
@@ -54,10 +67,10 @@ class DefaultDeckBuilder implements DeckBuilder {
         this.pirateShips = pirateShips
     }
 
-    buildPirateShipsWithSkulls(quantity: number, skulls: number, pirateShipPrototype: CardPirateShip) {
+    buildPirateShipsWithSkulls(quantity: number, skulls: number) {
         const pirateShipsWithSkulls = []
         for (let i = 0; i < quantity; i++) {
-            const pirateShip:CardPirateShip = pirateShipPrototype.clone()
+            const pirateShip:CardPirateShip = this.pirateShipPrototype.clone()
             pirateShip.setAttributes({skulls})
             pirateShipsWithSkulls.push(pirateShip)
         }
@@ -81,7 +94,17 @@ class DefaultDeckBuilder implements DeckBuilder {
 
     buildPirateShips() {
 
-        const pirateShipsWithSkulls = buildAllPirateShipsWithSkulls(this.buildPirateShipsWithSkulls, this.pirateShipPrototype);
+        const pirateShips1 = this.buildPirateShipsWithSkulls(2, 1);
+        const pirateShips2 = this.buildPirateShipsWithSkulls(4, 2);
+        const pirateShips3 = this.buildPirateShipsWithSkulls(4, 3);
+        const pirateShips4 = this.buildPirateShipsWithSkulls(2, 4);
+
+        const pirateShipsWithSkulls = [
+            ...pirateShips1,
+            ...pirateShips2,
+            ...pirateShips3,
+            ...pirateShips4,
+        ];
 
         this.buildPirateShipsWithColors(pirateShipsWithSkulls)
     }

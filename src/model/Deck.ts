@@ -20,7 +20,7 @@ class Deck implements DeckInterface {
     listCards() {
         console.log("Cards from deck: ")
         this.cards.forEach((card, index) => {
-            console.log(`${index} - Type: ${card.type} Attributes: ${card.attributes}`)
+            console.log(`${index} - Type: ${card.type} Attributes: ${JSON.stringify(card.attributes)}`)
         })
     }
 }

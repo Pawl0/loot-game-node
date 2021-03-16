@@ -1,6 +1,21 @@
 import React, { useMemo } from "react";
 import { io } from "socket.io-client";
 import { useState } from "react";
+import {Card} from './Card'
+import styled from "styled-components";
+import Slide from 'react-reveal/Slide';
+
+const GameContainer = styled.div`
+  margin: 32px;
+`
+
+const CardsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+`
 
 const Game: React.FC<{ setPlayerID: Function }> = ({ setPlayerID }) => {
   const [deck, setDeck] = useState({ owner: "", cards: [] });
@@ -61,27 +76,31 @@ const Game: React.FC<{ setPlayerID: Function }> = ({ setPlayerID }) => {
   })
 
   return (
-    <div>
+    <GameContainer>
       <button onClick={buildDeck}>Build Deck</button>
       <h1>Owner ID: {deck.owner}</h1>
-      <ul>
+      <CardsContainer>
         {deck.cards &&
-          deck.cards.map((card, index) => (
-            <li key={index}>{JSON.stringify(card)}</li>
+          deck.cards.map((card: {type: string, attributes: any}, index) => (
+          <Slide top>
+              <Card key={index} type={card.type} attributes={card.attributes} />
+          </Slide>
           ))}
-      </ul>
+      </CardsContainer>
       <hr />
-      <input placeholder="amount of coins" value={coins} onChange={setAmountOfCoins} type="number" />
+      {/* <input placeholder="amount of coins" value={coins} onChange={setAmountOfCoins} type="number" />
       <button onClick={buildMerchantShip}>Build Merchant Ship</button> 
       <button onClick={clearMerchantShips}>Clear Merchant Ships</button>
       <h1>Owner ID: {merchantShips.owner}</h1>
-      <ul>
+      <CardsContainer>
         {merchantShips.cards &&
-          merchantShips.cards.map((card, index) => (
-            <li key={index}>{JSON.stringify(card)}</li>
-          ))}
-      </ul>
-    </div>
+          merchantShips.cards.map((card: {type: string, attributes: any}, index) => (
+              <Card key={index} type={card.type} attributes={card.attributes} delay={index}/>
+            )
+          )
+        }
+        </CardsContainer> */}
+    </GameContainer>
   );
 };
 
