@@ -23,9 +23,49 @@ export const Card: React.FC<{
   attributes: any;
 }> = ({ type, attributes }) => {
 
+  const onDragOver = (event: React.DragEvent) => {
+    event.preventDefault()
+  }
+  
+  const onDragEnter = (event: React.DragEvent) => {
+    console.log("Drag Enter")
+    console.log("target: ", event.target.id)
+    event.target.style.background = "red"
+  }
+
+  const onDragLeave = (event: React.DragEvent) => {
+    event.preventDefault()
+      event.target.style.background = ""
+  }
+
+  const onDrop = (event: React.DragEvent) => {
+    console.log("Drop Event")
+    event.preventDefault();
+    event.target.style.visibility = "hidden";
+  }
+
+  const onDragStart = (event: React.DragEvent) => {
+    console.log("Drag start")
+    event.target.style.opacity = "0.8"
+  }
+
+  const onDragEnd = (event: React.DragEvent) => {
+    event.preventDefault()
+    console.log("Drag end")
+    event.target.style.opacity = "1"
+  }
+
   return (
         <StyledCard
-            color={attributes?.color || null}
+          id={JSON.stringify({type, attributes})}
+          draggable="true"
+          color={attributes?.color || null}
+          onDragOver={onDragOver}
+          onDragEnter={onDragEnter}
+          onDragLeave={onDragLeave}
+          onDrop={onDrop}
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
         >
             <h1>{type}</h1>
             <hr style={{ width: "70%" }} />
