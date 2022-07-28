@@ -3,38 +3,12 @@ import React, {
   useEffect,
 } from "react";
 import { useState } from "react";
-import styled from "styled-components";
-import { Hand } from "./Hand";
-import { DeckInterface } from "../../../../model";
-import { SocketContext } from "../SocketContext";
+import { Hand } from "../Hand/Hand";
+import { DeckInterface } from "../../../../../model";
+import { SocketContext } from "../../SocketContext";
+import { GameContainer, Table } from ".";
 
-const GameContainer = styled.div`
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-`;
-
-const Table = styled.div`
-  width: 90%;
-  height: 50%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(
-    to bottom right,
-    brown,
-    red
-  );
-  border-radius: 32px;
-  box-shadow: 20px 20px 33px 10px;
-`;
-
-const Game: React.FC<{
+export const Game: React.FC<{
   setPlayerID: Function;
   setPlayers: Function;
 }> = ({ setPlayerID, setPlayers }) => {
@@ -105,5 +79,3 @@ const Game: React.FC<{
     </GameContainer>
   );
 };
-
-export default React.memo(Game);

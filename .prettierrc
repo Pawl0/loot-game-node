@@ -3,7 +3,7 @@
   "useTabs": false,
   "bracketSpacing": true,
   "arrowParens": "always",
-  "printWidth": 50,
+  "printWidth": 120,
   "trailingComma": "es5",
   "jsxBracketSameLine": false
 }
