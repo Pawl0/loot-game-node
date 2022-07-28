@@ -1,13 +1,34 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { io } from "socket.io-client";
 import { useState } from "react";
-import {Card} from './Card'
+import { Card } from './Card'
 import styled from "styled-components";
-import Slide from 'react-reveal/Slide';
+// import Slide from 'react-reveal/Slide';
+import { Hand } from "./Hand";
+import { DeckInterface } from "../../../../model";
 
 const GameContainer = styled.div`
-  margin: 32px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 `
+
+const Table = styled.div`
+  width: 90%;
+  height: 50%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom right, brown, red);
+  border-radius: 32px;
+  box-shadow: 20px 20px 33px 10px;
+`
+
 
 const CardsContainer = styled.div`
   display: flex;
@@ -18,9 +39,10 @@ const CardsContainer = styled.div`
 `
 
 const Game: React.FC<{ setPlayerID: Function }> = ({ setPlayerID }) => {
-  const [deck, setDeck] = useState({ owner: "", cards: [] });
+  const [deck, setDeck] = useState<DeckInterface>(null as unknown as DeckInterface);
   const [merchantShips, setMerchantShips] = useState({ owner: "", cards: [] });
   const [coins, setCoins] = useState(0);
+  const [dragged, setDragged] = useState<any>()
 
   const socket = useMemo(() => io(), []);
 
@@ -35,7 +57,7 @@ const Game: React.FC<{ setPlayerID: Function }> = ({ setPlayerID }) => {
 
   const buildMerchantShip = () => {
     console.log("Building merchant ship")
-    socket.emit("build-merchant-ship", {socketID: socket.id, coins})
+    socket.emit("build-merchant-ship", { socketID: socket.id, coins })
   }
 
   const clearMerchantShips = () => {
@@ -49,18 +71,15 @@ const Game: React.FC<{ setPlayerID: Function }> = ({ setPlayerID }) => {
     console.log(`Player connected with id: ${playerId}`);
   });
 
-  socket.on("deck-built", (data) => {
-    console.log(`Player ${data.owner} built a deck`);
-    console.log("deck cards: ",data.deck.cards)
-    setDeck({
-      owner: data.owner,
-      cards: data.deck.cards,
-    });
+  socket.on("deck-built", ({ owner, deck: initialDeck }) => {
+    console.log(`Player ${owner} built a deck`);
+    console.log("deck cards: ", initialDeck.cards)
+    setDeck(initialDeck);
   });
 
   socket.on("merchant-ship-built", (data) => {
     console.log(`Player ${data.owner} built a merchant ship`);
-    console.log("merchant ship cards: ",data.cards)
+    console.log("merchant ship cards: ", data.cards)
     setMerchantShips({
       owner: data.owner,
       cards: data.cards,
@@ -75,31 +94,49 @@ const Game: React.FC<{ setPlayerID: Function }> = ({ setPlayerID }) => {
     })
   })
 
+  useEffect(() => {
+    buildDeck()
+
+    console.clear();
+
+    const listener = document.addEventListener;
+
+    listener("dragstart", (event: any) => {
+      console.log("start !");
+      return setDragged(event.target);
+    });
+
+    listener("dragend", (event) => {
+      return console.log("end !");
+    });
+
+    listener("dragover", function (event) {
+      return event.preventDefault();
+    });
+
+  }, [])
+
+  useEffect(() => {
+    document.addEventListener("drop", (event: any) => {
+      console.log("drop !");
+      event.preventDefault();
+      console.log("className: ", event?.target.className)
+      console.log({ dragged })
+      if (event?.target.className.includes("dropzone") && dragged) {
+        dragged.parentNode.removeChild(dragged);
+        return event.target.appendChild(dragged);
+      }
+    });
+  }, [dragged])
+
+  useEffect(() => {
+    console.log({ deck })
+  }, [deck])
+
   return (
     <GameContainer>
-      <button onClick={buildDeck}>Build Deck</button>
-      <h1>Owner ID: {deck.owner}</h1>
-      <CardsContainer>
-        {deck.cards &&
-          deck.cards.map((card: {type: string, attributes: any}, index) => (
-          <Slide top>
-              <Card key={index} type={card.type} attributes={card.attributes} />
-          </Slide>
-          ))}
-      </CardsContainer>
-      <hr />
-      {/* <input placeholder="amount of coins" value={coins} onChange={setAmountOfCoins} type="number" />
-      <button onClick={buildMerchantShip}>Build Merchant Ship</button> 
-      <button onClick={clearMerchantShips}>Clear Merchant Ships</button>
-      <h1>Owner ID: {merchantShips.owner}</h1>
-      <CardsContainer>
-        {merchantShips.cards &&
-          merchantShips.cards.map((card: {type: string, attributes: any}, index) => (
-              <Card key={index} type={card.type} attributes={card.attributes} delay={index}/>
-            )
-          )
-        }
-        </CardsContainer> */}
+      <Table id="table" draggable="true" className="dropzone" />
+      {deck && <Hand socket={socket} />}
     </GameContainer>
   );
 };

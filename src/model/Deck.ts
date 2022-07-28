@@ -1,3 +1,4 @@
+import { shuffleArray } from '../utils'
 import { DeckInterface, CardInterface } from './'
 
 class Deck implements DeckInterface {
@@ -8,7 +9,7 @@ class Deck implements DeckInterface {
         this.cards = cards
     }
 
-    public getCard() {
+    public getCard(): CardInterface {
         return this.cards.pop()
     }
 
@@ -16,6 +17,10 @@ class Deck implements DeckInterface {
         this.cards = cards
     }
 
+    public gethand(length: number = 7) {
+        shuffleArray(this.cards)
+        return this.cards.splice(0, length)
+    }
 
     listCards() {
         console.log("Cards from deck: ")

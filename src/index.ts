@@ -83,8 +83,8 @@ io.on("connection", (socket) => {
       addMerchantShip(coins);
       console.log(
         "Player: " +
-          socketID +
-          " built merchant ship: "
+        socketID +
+        " built merchant ship: "
       );
       console.log(
         "MerchantShips: ",
@@ -108,8 +108,8 @@ io.on("connection", (socket) => {
       clearMerchantShips();
       console.log(
         "Player: " +
-          socketID +
-          " cleared merchant ships!!!"
+        socketID +
+        " cleared merchant ships!!!"
       );
       io.emit("merchant-ships-cleared", {
         owner: socketID,
@@ -122,7 +122,13 @@ io.on("connection", (socket) => {
       console.log("Players connected: ", players);
     }
   );
+
+  socket.on("get-hand", ({ socketID, length }) => {
+    const hand = game.deck.gethand(length)
+    io.emit("on-get-hand", hand)
+  });
 });
+
 
 const webServer = socketInstance.getWebServer()
 
