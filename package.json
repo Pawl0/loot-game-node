@@ -4,7 +4,7 @@
   "description": "A NodeJS version of the Loot cardgame",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node ./src/index.ts",
+    "dev": "nodemon",
     "build:frontend": "cd ./src/client/loot-game/ && npm run build && cd ../../",
     "postinstall": "cd ./src/client/loot-game/ && npm i && cd ../../ && npm run build:frontend",
     "start": "npm run dev",
@@ -28,6 +28,7 @@
   "devDependencies": {
     "@types/express": "^4.17.11",
     "@types/node": "^14.14.34",
-    "@types/react-dom": "^18.0.6"
+    "@types/react-dom": "^18.0.6",
+    "prettier": "^2.7.1"
   }
 }
