@@ -10,6 +10,7 @@ export const Card: React.FC<{
       id={JSON.stringify({ type, attributes })}
       draggable="true"
       color={attributes?.color || null}
+      datatype={type}
     >
       <h1>{type}</h1>
       <hr style={{ width: "70%" }} />
